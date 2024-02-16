@@ -51,14 +51,17 @@ public class ShootingController : MonoBehaviour
 
     private void OnShootPerformed(InputAction.CallbackContext obj)
     {
+        Debug.Log("Shot");
         shootDown = true;
     }
 
     private void Shoot()
     {
-         GameObject projectile = Instantiate(projectilePrefab, firingPoint.transform.position, firingPoint.transform.rotation);
+         GameObject projectile = Instantiate(projectilePrefab, firingPoint.transform.position, firingPoint.transform.localRotation);
          Rigidbody rb = projectile.GetComponent<Rigidbody>();
-         rb.AddForce(0, 0, 1000);
+
+         Vector3 dir = firingPoint.transform.forward * 10000;
+         rb.AddForce(dir);
          timeSinceShot = 0;
     }
     

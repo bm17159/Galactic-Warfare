@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Bradley's Scene.unity
+    guid: a603fb556d904ec42b5429115a7d4e0b
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c84eb1f3be5aab247aca34f5690b7059,
       type: 2}

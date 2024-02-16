@@ -12,6 +12,10 @@ public class InputManager : MonoBehaviour
     public Controls controls;
 
     public InputAction shoot;
+
+    public InputAction thrust;
+
+    public InputAction rotate;
     
     private void Awake()
     {
@@ -26,12 +30,16 @@ public class InputManager : MonoBehaviour
         
         controls = new Controls();
         controls.Enable();
+        thrust = controls.Locomotion.Thrust;
+        rotate = controls.Locomotion.Rotation;
+        shoot = controls.Locomotion.Shoot;
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        shoot = controls.Locomotion.Shoot;
+        
     }
 
     // Update is called once per frame

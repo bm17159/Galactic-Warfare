@@ -309,7 +309,7 @@ MonoBehaviour:
   m_YAxis:
     Value: 1
     m_SpeedMode: 0
-    m_MaxSpeed: 2
+    m_MaxSpeed: 3
     m_AccelTime: 0.2
     m_DecelTime: 0.1
     m_InputAxisName: Mouse Y
@@ -381,7 +381,7 @@ Transform:
   m_GameObject: {fileID: 138506061}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 30, z: -0.5}
+  m_LocalPosition: {x: 0.48514798, y: 30, z: -0.12096053}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -545,7 +545,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230615080}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.67482877, y: 0.00000041127439, z: -0.00000037608334, w: 0.73797435}
+  m_LocalRotation: {x: 0.5317727, y: -0.4543419, z: 0.41546562, w: 0.5815321}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -759,6 +759,24 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  thrust:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  rotate:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!4 &678182368
 Transform:
   m_ObjectHideFlags: 0
@@ -857,8 +875,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeedf: 300
-  brakeTime: 1.25
-  brakeSpeed: -3000
+  brakeTime: 2
+  brakeSpeed: 30000
   rotateSpeed: 50
   follow: {fileID: 782230792}
   rb: {fileID: 947345938}
@@ -934,7 +952,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1015404168}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7009092, y: 0.00000070106364, z: -0.00000068893314, w: 0.7132505}
+  m_LocalRotation: {x: 0.552324, y: -0.43912086, z: 0.43152282, w: 0.56204915}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1267,7 +1285,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1599208443}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.68810564, y: 0.0000013311306, z: -0.000001262328, w: 0.72561055}
+  m_LocalRotation: {x: 0.542234, y: -0.44673133, z: 0.42364094, w: 0.57178825}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1316,8 +1334,8 @@ MonoBehaviour:
   debrisModel5: {fileID: 4254506811367628441, guid: f9cf7c3fbd29d4542a49058365c9db1f,
     type: 3}
   modelCount: 5
-  Range: 200
-  debrisAmount: 100
+  Range: 1000
+  debrisAmount: 1000
   debris: []
   minScale: 0.1
   maxScale: 3
@@ -1356,7 +1374,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 100
+  m_Radius: 1000
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2068276381
 GameObject:
@@ -1445,8 +1463,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2068276381}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.70090926, y: 0.0000014021294, z: -0.0000013778686, w: 0.7132505}
-  m_LocalPosition: {x: 0, y: 30, z: -0.5}
+  m_LocalRotation: {x: 0.5523255, y: -0.43911892, z: 0.43152094, w: 0.5620506}
+  m_LocalPosition: {x: 0.48514798, y: 30, z: -0.12096053}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
