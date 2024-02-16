@@ -53,6 +53,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""cdba99d7-578c-45cf-8263-abc12977199f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -88,6 +97,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Brake"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4fad1fd7-6dd2-48de-9ce9-b7814961c3ca"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -99,6 +119,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Locomotion_Thrust = m_Locomotion.FindAction("Thrust", throwIfNotFound: true);
         m_Locomotion_Rotation = m_Locomotion.FindAction("Rotation", throwIfNotFound: true);
         m_Locomotion_Brake = m_Locomotion.FindAction("Brake", throwIfNotFound: true);
+        m_Locomotion_Shoot = m_Locomotion.FindAction("Shoot", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -163,6 +184,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Locomotion_Thrust;
     private readonly InputAction m_Locomotion_Rotation;
     private readonly InputAction m_Locomotion_Brake;
+    private readonly InputAction m_Locomotion_Shoot;
     public struct LocomotionActions
     {
         private @Controls m_Wrapper;
@@ -170,6 +192,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Thrust => m_Wrapper.m_Locomotion_Thrust;
         public InputAction @Rotation => m_Wrapper.m_Locomotion_Rotation;
         public InputAction @Brake => m_Wrapper.m_Locomotion_Brake;
+        public InputAction @Shoot => m_Wrapper.m_Locomotion_Shoot;
         public InputActionMap Get() { return m_Wrapper.m_Locomotion; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -188,6 +211,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Brake.started += instance.OnBrake;
             @Brake.performed += instance.OnBrake;
             @Brake.canceled += instance.OnBrake;
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
         }
 
         private void UnregisterCallbacks(ILocomotionActions instance)
@@ -201,6 +227,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Brake.started -= instance.OnBrake;
             @Brake.performed -= instance.OnBrake;
             @Brake.canceled -= instance.OnBrake;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
         }
 
         public void RemoveCallbacks(ILocomotionActions instance)
@@ -223,5 +252,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnThrust(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
         void OnBrake(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
     }
 }

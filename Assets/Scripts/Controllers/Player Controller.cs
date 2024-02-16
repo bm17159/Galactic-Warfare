@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         Thrust(Time.deltaTime);
-        Rotate();
-        //rb.transform.LookAt(follow.transform);
+        //Rotate();
+        rb.transform.LookAt(follow.transform);
         //transform.rotation = Quaternion.Lerp();
     }
 
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void Rotate()
+    /*private void Rotate()
     {
         if (Input.GetKey(KeyCode.A))
         {
@@ -83,6 +83,6 @@ public class PlayerController : MonoBehaviour
             rb.MoveRotation(rb.rotation * deltaRotation);
             c.MoveRotation(rb.rotation * deltaRotation);
         }
-    }
+    } */
 }
 

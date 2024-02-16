@@ -1,4 +1,4 @@
-/*using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -11,11 +11,7 @@ public class InputManager : MonoBehaviour
 
     public Controls controls;
 
-    public Vector2 move
-    {
-        get;
-        set;
-    }
+    public InputAction shoot;
     
     private void Awake()
     {
@@ -35,13 +31,13 @@ public class InputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        shoot = controls.Locomotion.Shoot;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        move = controls.Locomotion.Thrust.ReadValue<Vector2>();
+        
         
     }
-}*/
+}
