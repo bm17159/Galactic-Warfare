@@ -108,13 +108,13 @@ public class PlayerController : MonoBehaviour
     {
        
         
-        /*Quaternion deltaRotation = Quaternion.Euler(rotation * Time.fixedDeltaTime);
+        Quaternion deltaRotation = Quaternion.Euler(rotation * Time.fixedDeltaTime);
         rb.MoveRotation(rb.rotation * deltaRotation);
         c.MoveRotation(rb.rotation * deltaRotation);
             
         
         
-        Quaternion deltaRotation = Quaternion.Euler(-rotation * Time.fixedDeltaTime);
+        /*Quaternion deltaRotation = Quaternion.Euler(-rotation * Time.fixedDeltaTime);
         rb.MoveRotation(rb.rotation * deltaRotation);
         c.MoveRotation(rb.rotation * deltaRotation);*/
         

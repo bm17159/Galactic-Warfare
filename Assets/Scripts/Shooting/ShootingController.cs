@@ -10,6 +10,7 @@ public class ShootingController : MonoBehaviour
     [Header("Spawning Info")]
     [SerializeField]
     private GameObject projectilePrefab;
+    
     [SerializeField]
     private GameObject firingPoint;
 
@@ -51,7 +52,6 @@ public class ShootingController : MonoBehaviour
 
     private void OnShootPerformed(InputAction.CallbackContext obj)
     {
-        Debug.Log("Shot");
         shootDown = true;
     }
 

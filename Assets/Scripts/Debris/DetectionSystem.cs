@@ -25,7 +25,11 @@ public class DetectionSystem : MonoBehaviour
         if (other.GetComponent<PlayerController>() != null)
         {
             // destroy or move this rock
-            Destroy(gameObject);
+            Debug.Log("Debris hit Ship");
+            rb = this.GetComponent<Rigidbody>();
+            currentForce = rb.velocity;
+            rb.AddForce(-currentForce*forceMultiplier);
+            
         }
     }
 }
