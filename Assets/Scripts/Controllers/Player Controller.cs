@@ -28,10 +28,13 @@ public class PlayerController : NetworkBehaviour
     private Vector3 rotation;
     //private Camera c;
 
+    private bool thrustDown = false;
+    private bool rotateDown = false;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        //inputManager = InputManager.singleton;
+        c = GetComponent<Rigidbody>();
+        
         Cursor.lockState = CursorLockMode.Locked;
         rotation = new Vector3(0, 0, rotateSpeed);
         //c = GetComponent<Camera>();
@@ -62,17 +65,19 @@ public class PlayerController : NetworkBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
-
-    private void Thrust(float delta)
+    #region Thrust 
+    private void OnThrustCanceled(InputAction.CallbackContext obj)
     {
-        if (Input.GetKey(KeyCode.W))
+        
+        if (rb.velocity.magnitude > 0f)
         {
             if (!IsOwner)return;
             rb.AddForce(follow.transform.forward * (20000 * delta));
             //rb.velocity = new Vector3(moveDirection.x, moveDirection.y, moveDirection.z);
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeedf);
         }
-        else
+
+        IEnumerator Slow()
         {
             if (!IsOwner)return;
             if (rb.velocity.magnitude > 0f)
@@ -80,16 +85,35 @@ public class PlayerController : NetworkBehaviour
                 StartCoroutine(Slow());
             }
 
-            IEnumerator Slow()
-            {
-                rb.AddForce(follow.transform.forward * (brakeSpeed * delta));
-                yield return new WaitForSeconds(brakeTime);
-                rb.velocity -= rb.velocity;
-                
-            }
+    private void OnThrustPerformed(InputAction.CallbackContext obj)
+    {
+        Debug.Log("forward");
+        thrustDown = true;
+    }
+    
+   
+    private void Thrust()
+    {
+       
+            rb.AddForce(follow.transform.forward * (20000 * Time.deltaTime));
+            //rb.velocity = new Vector3(moveDirection.x, moveDirection.y, moveDirection.z);
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeedf);
+
+           
             
         }
+    #endregion
 
+    #region Rotate
+    private void OnRotateCanceled(InputAction.CallbackContext obj)
+    {
+        rotateDown = false;
+    }
+
+    private void OnRotatePerformed(InputAction.CallbackContext obj)
+    {
+        Debug.Log("rotate");
+        rotateDown = true;
     }
 
     private void Rotate()
