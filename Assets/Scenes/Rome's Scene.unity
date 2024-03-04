@@ -1076,6 +1076,9 @@ MonoBehaviour:
   serverBtn: {fileID: 425952773}
   hostBtn: {fileID: 17343461}
   clientBtn: {fileID: 1907890945}
+  fighter: {fileID: 0}
+  heavy: {fileID: 0}
+  speedster: {fileID: 0}
 --- !u!1 &1744977554
 GameObject:
   m_ObjectHideFlags: 0
