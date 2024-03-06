@@ -14,7 +14,7 @@ public class ShootingController : MonoBehaviour
     [SerializeField]
     private GameObject firingPoint;
 
-    [SerializeField] private float rpm = 60;
+    [SerializeField] private float rps = 60;
         
     [SerializeField]
     private float fireRate;
@@ -25,7 +25,7 @@ public class ShootingController : MonoBehaviour
     private bool shootDown = false;
     void Start()
     {
-        fireRate = rpm / 60;
+        fireRate = rps / 60;
         
         firingPoint = gameObject;
         InputManager.singleton.shoot.performed += OnShootPerformed;

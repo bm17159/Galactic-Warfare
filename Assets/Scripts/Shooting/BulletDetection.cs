@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,9 +9,10 @@ public class BulletDetection : MonoBehaviour
     {
         if (other.GetComponent<DebrisController>() != null)
         {
-            Debug.Log("Bullet left the sphere");
+            //Debug.Log("Bullet left the sphere");
            Destroy(gameObject);
         }
+        
     }
-
+    
 }
