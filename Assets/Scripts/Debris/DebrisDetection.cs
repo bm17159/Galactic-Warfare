@@ -51,13 +51,12 @@ public class DebrisDetection : MonoBehaviour
                 Debug.Log("split");
                 rb = gameObject.GetComponent<Rigidbody>();
                 scale = gameObject.transform.localScale;
-                gameObject.transform.localScale.Set((scale.x * scaler),(scale.y * scaler), (scale.z * scaler));
                 rb.mass *= 1/2;
                 //if the scale is smaller than the smallest allowed mass, then destroy the object instead of spliting object.
                 if (rb.mass <= 0.25)
                 {
                     Debug.Log("split");
-                    gameObject.transform.localScale.Set(scale.x/2, scale.y/2, scale.z/2);
+                    gameObject.transform.localScale= new Vector3(scale.x/2, scale.y/2, scale.z/2);
                     scale = gameObject.transform.localScale;
                     Instantiate(gameObject);
                     
