@@ -10,16 +10,15 @@ public class ShootingController : MonoBehaviour
     [Header("Spawning Info")]
     [SerializeField]
     private GameObject projectilePrefab;
-    
-    [SerializeField]
-    private GameObject firingPoint;
+
+    [SerializeField] private GameObject firingPoint;
 
     [SerializeField] private float rps = 60;
         
     [SerializeField]
     private float fireRate;
 
-    [SerializeField] private float timeSinceShot = 0;
+    [SerializeField] private float timeSinceShot;
     // Start is called before the first frame update
 
     private bool shootDown = false;
@@ -59,8 +58,10 @@ public class ShootingController : MonoBehaviour
     {
          GameObject projectile = Instantiate(projectilePrefab, firingPoint.transform.position, firingPoint.transform.localRotation);
          Rigidbody rb = projectile.GetComponent<Rigidbody>();
+         //Physics.Raycast(firingPoint.transform.position, firingPoint.transform.forward, new RaycastHit(), 1.3, new int);
+         //Physics.Raycast(firingPoint2.transform.position, firingPoint2.transform.forward, new RaycastHit(), 1.3, new int);
 
-         Vector3 dir = firingPoint.transform.forward * 10000;
+         Vector3 dir = firingPoint.transform.forward * (10000000000 * Time.deltaTime);
          rb.AddForce(dir);
          timeSinceShot = 0;
     }

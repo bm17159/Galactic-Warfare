@@ -1,11 +1,16 @@
 using System;
-using System.Collections;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using Cursor = UnityEngine.Cursor;
+using System.Collections;
+using System.Diagnostics;
+using Unity.Netcode;
+using UnityEngine;
+using Cinemachine;
 
-public class PlayerController : MonoBehaviour
+using Cursor = UnityEngine.Cursor;
+using Debug = UnityEngine.Debug;
+
+public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private float maxSpeedf;
 
@@ -14,114 +19,165 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float brakeSpeed;
 
     [SerializeField] private float rotateSpeed;
+    
+    [SerializeField] private string Class;
 
-    //private InputManager inputManager;
+    [SerializeField] private CinemachineFreeLook fl;
+    //[SerializeField] private AudioListener listener;
+
+    private Stopwatch timemoved;
+
+    private InputManager inputManager;
     private CharacterController controller;
     public GameObject follow;
     public Rigidbody rb;
     private Vector3 rotation;
-    public Rigidbody c;
 
     private bool thrustDown = false;
     private bool rotateDown = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        c = GetComponent<Rigidbody>();
-        
+
         Cursor.lockState = CursorLockMode.Locked;
         rotation = new Vector3(0, 0, rotateSpeed);
-        
-        
-        
-        InputManager.singleton.thrust.performed += OnThrustPerformed;
-        InputManager.singleton.thrust.canceled += OnThrustCanceled;
-        InputManager.singleton.rotate.performed += OnRotatePerformed;
-        InputManager.singleton.rotate.canceled += OnRotateCanceled;
+
+        /*#region vars
+
+        if (Class.Equals("Fighter"))
+        {
+            maxSpeedf = 200;
+            brakeTime = 1.25f;
+            brakeSpeed = -200;
+            rotateSpeed = 50;
+        }
+        if (Class.Equals("Heavy"))
+        {
+            maxSpeedf = 200;
+            brakeTime = 1.25f;
+            brakeSpeed = -200;
+            rotateSpeed = 50;
+        }if (Class.Equals("Speedster"))
+        {
+            maxSpeedf = 200;
+            brakeTime = 1.25f;
+            brakeSpeed = -200;
+            rotateSpeed = 50;
+        }
+
+        #endregion*/
     }
 
-    void Update()
+    public override void OnNetworkSpawn()
     {
-        if (thrustDown)
+        if (IsOwner)
         {
-            Thrust();
+            fl.Priority = 10000;
         }
+        else
+        {
+            fl.Priority = -1000;
+        }
+    }
 
-        if (rotateDown)
-        {
-            Rotate();
-        }
+    void FixedUpdate()
+    {
+        if (!IsOwner) return;
+        Thrust(Time.deltaTime);
+        //Rotate();
         rb.transform.LookAt(follow.transform);
         //transform.rotation = Quaternion.Lerp();
-    }
-    #region Thrust 
-    private void OnThrustCanceled(InputAction.CallbackContext obj)
-    {
-        
-        if (rb.velocity.magnitude > 0f)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            StartCoroutine(Slow());
+            Cursor.lockState = CursorLockMode.None;
         }
-
-        IEnumerator Slow()
-        {
-            rb.AddForce(follow.transform.forward * (-brakeSpeed * Time.deltaTime));
-            yield return new WaitForSeconds(brakeTime);
-            rb.velocity -= rb.velocity;
-                
-        }
-        thrustDown = false;
     }
 
-    private void OnThrustPerformed(InputAction.CallbackContext obj)
+    #region Thrust
+    void OnThrustPerformed(InputAction.CallbackContext obj)
     {
-        Debug.Log("forward");
-        thrustDown = true;
+        if (!IsOwner) return;
+            if (rb.velocity.magnitude > 0f)
+            {
+                rb.AddForce(follow.transform.forward * (20000 * Time.deltaTime));
+                //rb.velocity = new Vector3(moveDirection.x, moveDirection.y, moveDirection.z);
+                rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeedf);
+            }
     }
     
-   
-    private void Thrust()
+
+    private void Thrust(float delta)
     {
-       
-            rb.AddForce(follow.transform.forward * (20000 * Time.deltaTime));
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            timemoved.Start();
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            rb.AddForce(follow.transform.forward * (20000 * delta));
             //rb.velocity = new Vector3(moveDirection.x, moveDirection.y, moveDirection.z);
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeedf);
+        }
+        else
+        {
+            
+            if (rb.velocity.magnitude > 0f)
+            {
+                StartCoroutine(Slow());
+            }
 
-           
+            IEnumerator Slow()
+            {
+                rb.AddForce(follow.transform.forward * (brakeSpeed * delta));
+                if (timemoved.ElapsedMilliseconds * 100 > brakeTime)
+                {
+                    yield return new WaitForSeconds(brakeTime);
+                }
+                else
+                {
+                    yield return new WaitForSeconds(timemoved.ElapsedMilliseconds * 100);
+                }
+                timemoved.Stop();
+                rb.velocity -= rb.velocity;
+                
+            }
             
         }
-    #endregion
 
-    #region Rotate
-    private void OnRotateCanceled(InputAction.CallbackContext obj)
-    {
-        rotateDown = false;
     }
+            #endregion
 
-    private void OnRotatePerformed(InputAction.CallbackContext obj)
-    {
-        Debug.Log("rotate");
-        rotateDown = true;
-    }
+            /*#region Rotate
 
-    private void Rotate()
-    {
-       
-        
-        Quaternion deltaRotation = Quaternion.Euler(rotation * Time.fixedDeltaTime);
-        rb.MoveRotation(rb.rotation * deltaRotation);
-        c.MoveRotation(rb.rotation * deltaRotation);
-            
-        
-        
-        /*Quaternion deltaRotation = Quaternion.Euler(-rotation * Time.fixedDeltaTime);
-        rb.MoveRotation(rb.rotation * deltaRotation);
-        c.MoveRotation(rb.rotation * deltaRotation);*/
-        
-    } 
-    
+            void OnRotateCanceled(InputAction.CallbackContext obj)
+            {
+                rotateDown = false;
+            }
 
-    #endregion
-   
-}
+            void OnRotatePerformed(InputAction.CallbackContext obj)
+            {
+                Debug.Log("rotate");
+                rotateDown = true;
+            }
+
+            void Rotate()
+            {
+                if (!IsOwner) return;
+                if (Input.GetKey(KeyCode.A))
+                {
+                    Quaternion deltaRotation = Quaternion.Euler(rotation * Time.fixedDeltaTime);
+                    rb.MoveRotation(rb.rotation * deltaRotation);
+                }
+
+                if (Input.GetKey(KeyCode.D))
+                {
+                    Quaternion deltaRotation = Quaternion.Euler(-rotation * Time.fixedDeltaTime);
+                    rb.MoveRotation(rb.rotation * deltaRotation);
+                }
+            }
+
+            #endregion*/
+        }
+
 
