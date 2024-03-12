@@ -77,12 +77,14 @@ public class DebrisController : MonoBehaviour
             int x = Random.Range(0, debrisModels.Length);
 
             // Spawn the new Debris with a random size
-            float ranScale = Random.Range(minScale, maxScale);
-            Vector3 scale = new Vector3(ranScale, ranScale, ranScale);
+            float random = Random.Range(minScale, maxScale);
+            Vector3 scale = new Vector3(random, random, random);
             GameObject temp = Instantiate(debrisModels[x], pos, Random.rotation, transform);
+            temp.GetComponent<DebrisDetection>().Init(transform);
             temp.transform.localScale = scale;
             // Add a random force to each Debris
             Rigidbody rb = temp.GetComponent<Rigidbody>();
+            rb.mass *= 10;
             rb.AddForce(force * forceMultiplier);
             rb.AddTorque(force * forceMultiplier);
             // Store in Array for future

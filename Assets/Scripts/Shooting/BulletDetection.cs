@@ -12,6 +12,7 @@ public class BulletDetection : MonoBehaviour
             //Debug.Log("Bullet left the sphere");
            Destroy(gameObject);
         }
+
         
     }
     
