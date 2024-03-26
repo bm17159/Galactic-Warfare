@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class ShootingController : MonoBehaviour
 {
@@ -11,7 +13,12 @@ public class ShootingController : MonoBehaviour
     [SerializeField]
     private GameObject projectilePrefab;
 
-    [SerializeField] private GameObject firingPoint;
+    [Header("Firing Points")]
+    [SerializeField] private Transform[] firingPoints;
+
+    [SerializeField] private Transform firingPoint1;
+    
+    
 
     [SerializeField] private float rps = 60;
         
@@ -25,12 +32,13 @@ public class ShootingController : MonoBehaviour
     void Start()
     {
         fireRate = rps / 60;
+
+        firingPoints = new Transform[5];
         
-        firingPoint = gameObject;
         InputManager.singleton.shoot.performed += OnShootPerformed;
         InputManager.singleton.shoot.canceled += OnShootCanceled;
     }
-
+    
     // Update is called once per frame
     private void Update()
     {
@@ -41,7 +49,9 @@ public class ShootingController : MonoBehaviour
         {
             Shoot();
         }
+        
     }
+    
 
 
     private void OnShootCanceled(InputAction.CallbackContext obj)
@@ -56,14 +66,25 @@ public class ShootingController : MonoBehaviour
 
     private void Shoot()
     {
-         GameObject projectile = Instantiate(projectilePrefab, firingPoint.transform.position, firingPoint.transform.localRotation);
-         Rigidbody rb = projectile.GetComponent<Rigidbody>();
-         //Physics.Raycast(firingPoint.transform.position, firingPoint.transform.forward, new RaycastHit(), 1.3, new int);
-         //Physics.Raycast(firingPoint2.transform.position, firingPoint2.transform.forward, new RaycastHit(), 1.3, new int);
-
-         Vector3 dir = firingPoint.transform.forward * (10000000000 * Time.deltaTime);
-         rb.AddForce(dir);
-         timeSinceShot = 0;
+        for (int i = 0; i < firingPoints.Length; i++)
+        {
+            if (firingPoints[i] is not null)
+            {
+                GameObject projectile = Instantiate(projectilePrefab, firingPoints[i].position, firingPoints[i].localRotation, firingPoints[i]);
+                Rigidbody rb = projectile.GetComponent<Rigidbody>();
+         
+                Vector3 dir = firingPoints[i].transform.forward * (100000 * Time.deltaTime);
+                rb.AddForce(dir);
+                timeSinceShot = 0;
+            }
+            
+        }
+        /*GameObject projectile = Instantiate(projectilePrefab, firingPoint1.position, firingPoint1.localRotation);
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+         
+        Vector3 dir = firingPoint1.transform.forward * (100000 * Time.deltaTime);
+        rb.AddForce(dir);
+        timeSinceShot = 0;*/
     }
     
 }

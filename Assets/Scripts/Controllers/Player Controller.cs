@@ -12,6 +12,7 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerController : NetworkBehaviour
 {
+    #region Vars
     [SerializeField] private float maxSpeedf;
 
     [SerializeField] private float brakeTime;
@@ -35,7 +36,8 @@ public class PlayerController : NetworkBehaviour
 
     private bool thrustDown = false;
     private bool rotateDown = false;
-
+    
+    #endregion
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -43,32 +45,9 @@ public class PlayerController : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         rotation = new Vector3(0, 0, rotateSpeed);
 
-        /*#region vars
-
-        if (Class.Equals("Fighter"))
-        {
-            maxSpeedf = 200;
-            brakeTime = 1.25f;
-            brakeSpeed = -200;
-            rotateSpeed = 50;
-        }
-        if (Class.Equals("Heavy"))
-        {
-            maxSpeedf = 200;
-            brakeTime = 1.25f;
-            brakeSpeed = -200;
-            rotateSpeed = 50;
-        }if (Class.Equals("Speedster"))
-        {
-            maxSpeedf = 200;
-            brakeTime = 1.25f;
-            brakeSpeed = -200;
-            rotateSpeed = 50;
-        }
-
-        #endregion*/
+        InputManager.singleton.thrust.performed += OnThrustPerformed;
+        InputManager.singleton.thrust.canceled += OnThrustCanceled;
     }
-
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
@@ -84,10 +63,11 @@ public class PlayerController : NetworkBehaviour
     void FixedUpdate()
     {
         if (!IsOwner) return;
-        Thrust(Time.deltaTime);
-        //Rotate();
+        if (thrustDown)
+        {
+            Thrust(Time.deltaTime);
+        }
         rb.transform.LookAt(follow.transform);
-        //transform.rotation = Quaternion.Lerp();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.lockState = CursorLockMode.None;
@@ -95,58 +75,35 @@ public class PlayerController : NetworkBehaviour
     }
 
     #region Thrust
-    void OnThrustPerformed(InputAction.CallbackContext obj)
+    private void OnThrustPerformed(InputAction.CallbackContext obj)
     {
-        if (!IsOwner) return;
-            if (rb.velocity.magnitude > 0f)
-            {
-                rb.AddForce(follow.transform.forward * (20000 * Time.deltaTime));
-                //rb.velocity = new Vector3(moveDirection.x, moveDirection.y, moveDirection.z);
-                rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeedf);
-            }
+        thrustDown = true;
+        rb.AddForce(follow.transform.forward * (20000 * Time.deltaTime));
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeedf);
     }
-    
+    private void OnThrustCanceled(InputAction.CallbackContext obj)
+    {
+        thrustDown = false;
+        if (rb.velocity.magnitude > 0f)
+        {
+            StartCoroutine(Slow());
+        }
+        IEnumerator Slow()
+        {
+            rb.AddForce(follow.transform.forward * (brakeSpeed * Time.deltaTime));
+            yield return new WaitForSeconds(brakeTime);
+            rb.velocity -= rb.velocity;
+        }
+        
+    }
 
     private void Thrust(float delta)
     {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            timemoved.Start();
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            rb.AddForce(follow.transform.forward * (20000 * delta));
-            //rb.velocity = new Vector3(moveDirection.x, moveDirection.y, moveDirection.z);
-            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeedf);
-        }
-        else
-        {
-            
-            if (rb.velocity.magnitude > 0f)
-            {
-                StartCoroutine(Slow());
-            }
-
-            IEnumerator Slow()
-            {
-                rb.AddForce(follow.transform.forward * (brakeSpeed * delta));
-                if (timemoved.ElapsedMilliseconds * 100 > brakeTime)
-                {
-                    yield return new WaitForSeconds(brakeTime);
-                }
-                else
-                {
-                    yield return new WaitForSeconds(timemoved.ElapsedMilliseconds * 100);
-                }
-                timemoved.Stop();
-                rb.velocity -= rb.velocity;
-                
-            }
-            
-        }
-
+        rb.AddForce(follow.transform.forward * (20000 * delta));
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeedf);
     }
-            #endregion
+
+    #endregion
 
             /*#region Rotate
 

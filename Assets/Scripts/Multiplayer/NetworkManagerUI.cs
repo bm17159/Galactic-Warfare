@@ -28,7 +28,6 @@ public class NetworkManagerUI : MonoBehaviour
         }));
         hostBtn.onClick.AddListener((() =>
         {
-            //NetworkManager.Singleton
             NetworkManager.Singleton.StartHost();
             serverBtn.gameObject.SetActive(false);
             hostBtn.gameObject.SetActive(false);
