@@ -32,8 +32,6 @@ public class ShootingController : MonoBehaviour
     void Start()
     {
         fireRate = rps / 60;
-
-        firingPoints = new Transform[5];
         
         InputManager.singleton.shoot.performed += OnShootPerformed;
         InputManager.singleton.shoot.canceled += OnShootCanceled;
@@ -68,12 +66,12 @@ public class ShootingController : MonoBehaviour
     {
         for (int i = 0; i < firingPoints.Length; i++)
         {
-            if (firingPoints[i] is not null)
+            if (firingPoints[i] != null)
             {
-                GameObject projectile = Instantiate(projectilePrefab, firingPoints[i].position, firingPoints[i].localRotation, firingPoints[i]);
+                GameObject projectile = Instantiate(projectilePrefab, firingPoints[i].position, firingPoints[i].localRotation);
                 Rigidbody rb = projectile.GetComponent<Rigidbody>();
          
-                Vector3 dir = firingPoints[i].transform.forward * (100000 * Time.deltaTime);
+                Vector3 dir = firingPoints[i].forward * (1000000 * Time.deltaTime);
                 rb.AddForce(dir);
                 timeSinceShot = 0;
             }
